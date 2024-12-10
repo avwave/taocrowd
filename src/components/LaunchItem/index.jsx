@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef } from "react";
 import './index.scss';
 import { Collapsible } from "../Collapsible";
 import { timeAgo } from "../../utils/date";
-import ReactJson from "react-json-view";
+import rocketimg from '../../assets/scss/noun-rocket-7371679.png'
 import ImageWithFallback from "../ImageFallback";
 
 
@@ -30,9 +30,9 @@ const LaunchDetails = ({
       <div className="content">
         <div className="badge">
           <ImageWithFallback
-            src={links?.mission_patch ?? '/noun-rocket-7371679.png'}
+            src={links?.mission_patch ?? rocketimg }
             alt="mission patch"
-            fallbackSrc='/noun-rocket-7371679.png'
+            fallbackSrc={rocketimg}
           />
         </div>
 
