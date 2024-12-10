@@ -6,7 +6,10 @@ import './index.scss'
 
 const DEFAULTLIMIT = 20
 
-const SpaceList = () => {
+const SpaceList = ({
+  filter
+}
+) => {
 
   const listRef = useRef(null)
 
@@ -16,10 +19,10 @@ const SpaceList = () => {
 
   const [error, setError] = useState('');
 
-  const [offset, setOffset] = useState(0);
+  
+  const offset = useRef(0)
 
   const [hasReachedEnd, setHasReachedEnd] = useState(false);
-
 
   const fetchData = useCallback(
     async () => {
@@ -29,8 +32,8 @@ const SpaceList = () => {
       try {
         setHasReachedEnd(false)
         const scrollTop = listRef.current?.scrollTop;
-        console.log(scrollTop, listRef)
-        const url = `https://api.spacexdata.com/v3/launches?limit=${DEFAULTLIMIT}&offset=${offset}&sort=flight_number&order=desc`
+        const rocketfilter = filter.replace(/\s+/g, '+');
+        const url = `https://api.spacexdata.com/v3/launches?limit=${DEFAULTLIMIT}&offset=${offset.current}&sort=flight_number&order=desc&rocket_name=${rocketfilter}`
         const response = await fetch(url)
 
         if (!response?.ok) {
@@ -39,12 +42,12 @@ const SpaceList = () => {
           return
         } else {
           const data = await response.json()
-          if (data.length <=0) {
+          if (data.length <= 0) {
             setHasReachedEnd(true)
             return
           }
           setLaunchData([...launchData, ...data])
-          setOffset(offset + DEFAULTLIMIT)
+          offset.current = offset + DEFAULTLIMIT
           setError(null)
           setTimeout(() => {
             listRef.current.scrollTop = scrollTop;
@@ -57,16 +60,16 @@ const SpaceList = () => {
       } finally {
         setLoading(false)
       }
-    }, [launchData, loading, offset, listRef, setHasReachedEnd]
+    }, [loading, filter, offset, launchData]
   );
 
 
   useEffect(
     () => {
-      
-        fetchData()
-      
-    }, []
+      offset.current = 0
+      setLaunchData([])
+      fetchData()
+    }, [filter]
   );
 
   useEffect(() => {
@@ -106,7 +109,7 @@ const SpaceList = () => {
 
         ))}
         {loading && (
-          <Spinner/>
+          <Spinner />
         )}
         {hasReachedEnd && (
           <>no more data</>
