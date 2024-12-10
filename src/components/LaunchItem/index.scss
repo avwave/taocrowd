@@ -1,0 +1,33 @@
+.list-item {
+  padding: 1em;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  margin-bottom: 1em;
+  .headerbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    .header {
+      font-size: 2em;
+      font-weight: bolder;
+    }
+
+    .status {
+      color: white;
+      font-size: small;
+      font-weight: bold;
+      padding: .5em;
+      &.upcoming {
+        color: black;
+        background-color: #6DFAFB;
+      }
+      &.success {
+        background-color: #73F33F;
+        color: black;
+      }
+      &.failed {
+        background-color: red;
+      }
+    }
+  }
+}
