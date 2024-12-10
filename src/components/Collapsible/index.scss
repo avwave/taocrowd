@@ -4,7 +4,7 @@
 
   &.open {
     max-height: 40vh;
-    overflow-y: scroll;
+    overflow-y: auto;
     scrollbar-gutter: stable both-edges;
     opacity: 1;
   }
