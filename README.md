@@ -29,3 +29,14 @@ What the app should do:
 
 - Feel free to show off more of your skillset. You can use state management libraries, react-router and other libraries that you are comfortable using.
 - You can add different transitions.
+
+
+
+## DEV NOTES
+install a live server `npm install -g serve`
+
+run build `npm run build`
+
+server build folder `serve -s build`
+
+searchable field is the rocket name (example: `Falcon Heavy`) case sensitive
