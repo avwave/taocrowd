@@ -1,13 +1,14 @@
 {
   "files": {
     "main.css": "/taocrowd/static/css/main.6cbdd27f.css",
-    "main.js": "/taocrowd/static/js/main.92792f43.js",
+    "main.js": "/taocrowd/static/js/main.161856cb.js",
+    "static/media/noun-rocket-7371679.png": "/taocrowd/static/media/noun-rocket-7371679.894fdb3673e75141909e.png",
     "index.html": "/taocrowd/index.html",
     "main.6cbdd27f.css.map": "/taocrowd/static/css/main.6cbdd27f.css.map",
-    "main.92792f43.js.map": "/taocrowd/static/js/main.92792f43.js.map"
+    "main.161856cb.js.map": "/taocrowd/static/js/main.161856cb.js.map"
   },
   "entrypoints": [
     "static/css/main.6cbdd27f.css",
-    "static/js/main.92792f43.js"
+    "static/js/main.161856cb.js"
   ]
 }
