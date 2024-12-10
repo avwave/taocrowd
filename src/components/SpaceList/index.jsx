@@ -4,7 +4,7 @@ import { LaunchItem } from "../LaunchItem";
 
 import './index.scss'
 
-const DEFAULTLIMIT = 10
+const DEFAULTLIMIT = 20
 
 const SpaceList = () => {
 
@@ -14,7 +14,7 @@ const SpaceList = () => {
 
   const [error, setError] = useState('');
 
-  const [offset, setOffset] = useState(0);
+  const [offset, setOffset] = useState(29);
 
   const fetchData = useCallback(
     async () => {
