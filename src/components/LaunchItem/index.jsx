@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import './index.scss';
 import { Collapsible } from "../Collapsible";
 import { timeAgo } from "../../utils/date";
@@ -89,4 +89,34 @@ const LaunchItem = ({ item }) => {
   </div>
 }
 
-export { LaunchItem }
+
+const VirtualizedItem = ({ index, getItem }) => {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        } else {
+          entry.target.classList.remove('visible');
+        }
+      });
+    });
+
+    observer.observe(ref.current);
+
+    return () => {
+      if (ref.current)
+        observer.unobserve(ref.current);
+    };
+  }, [ref]);
+
+  return (
+    <div ref={ref} className="item">
+      {getItem(index)}
+    </div>
+  );
+};
+
+export { LaunchItem, VirtualizedItem }

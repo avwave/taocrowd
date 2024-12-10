@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useRef } from "react";
 import { SpaceList } from "../SpaceList";
 import './index.scss'
 
 const Layout = () => {
+  
   return (
     <div className="layout-list">
-      <SpaceList />
+      <SpaceList 
+        
+      />
     </div>
   )
 }

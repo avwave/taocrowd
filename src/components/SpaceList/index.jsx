@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Spinner from "../Spinner/Spinner";
-import { LaunchItem } from "../LaunchItem";
+import { LaunchItem, VirtualizedItem } from "../LaunchItem";
 
 import './index.scss'
 
@@ -8,13 +8,18 @@ const DEFAULTLIMIT = 20
 
 const SpaceList = () => {
 
+  const listRef = useRef(null)
+
   const [loading, setLoading] = useState(false);
 
   const [launchData, setLaunchData] = useState([]);
 
   const [error, setError] = useState('');
 
-  const [offset, setOffset] = useState(29);
+  const [offset, setOffset] = useState(0);
+
+  const [hasReachedEnd, setHasReachedEnd] = useState(false);
+
 
   const fetchData = useCallback(
     async () => {
@@ -22,6 +27,9 @@ const SpaceList = () => {
       setLoading(true)
 
       try {
+        setHasReachedEnd(false)
+        const scrollTop = listRef.current?.scrollTop;
+        console.log(scrollTop, listRef)
         const url = `https://api.spacexdata.com/v3/launches?limit=${DEFAULTLIMIT}&offset=${offset}&sort=flight_number&order=desc`
         const response = await fetch(url)
 
@@ -31,53 +39,79 @@ const SpaceList = () => {
           return
         } else {
           const data = await response.json()
+          if (data.length <=0) {
+            setHasReachedEnd(true)
+            return
+          }
           setLaunchData([...launchData, ...data])
           setOffset(offset + DEFAULTLIMIT)
           setError(null)
+          setTimeout(() => {
+            listRef.current.scrollTop = scrollTop;
+          }, 0);
         }
 
       } catch (error) {
         setError(error)
+        console.log(error)
       } finally {
         setLoading(false)
       }
-
-      return null
-    }, [launchData, loading, offset]
+    }, [launchData, loading, offset, listRef, setHasReachedEnd]
   );
 
 
   useEffect(
     () => {
-      fetchData()
+      
+        fetchData()
+      
     }, []
   );
 
-  const handleScroll = useCallback(
-    async () => {
+  useEffect(() => {
+    const handleScroll = async () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop !==
+        document.documentElement.offsetHeight || loading
+      )
+        return;
 
-      return null
-    }, []
-  );
+      await fetchData();
+    };
 
-  if (loading) {
-    return <Spinner />
-  }
+    window.addEventListener('scroll', handleScroll);
 
-  if (launchData.length <= 0) {
-    return <>No data</>
-  }
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [listRef, fetchData, loading]);
+
+
+  const getItem = (index) => (
+    <LaunchItem
+      key={launchData[index].flight_number}
+      item={launchData[index]}
+    />
+  )
+
   return (
     <>
-      <ul className="list">
+      <div
+        className="list"
+        ref={listRef}
+      >
         {launchData.map((data, index) => (
-          <li
-            key={index}
-            className="item">
-              <LaunchItem item={data}/>
-          </li>
+          <VirtualizedItem getItem={getItem} key={index} index={index} />
+
         ))}
-      </ul>
+        {loading && (
+          <Spinner/>
+        )}
+        {hasReachedEnd && (
+          <>no more data</>
+        )}
+      </div>
       {error && <div className="card error">{error}</div>}
     </>
   )
