@@ -30,8 +30,7 @@ const LaunchDetails = ({
       <div className="content">
         <div className="badge">
           <ImageWithFallback
-            src={links?.mission_patch}
-            
+            src={links?.mission_patch ?? '/noun-rocket-7371679.png'}
             alt="mission patch"
             fallbackSrc='/noun-rocket-7371679.png'
           />
